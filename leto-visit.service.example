@@ -1,0 +1,16 @@
+# Leto 定时来访。由 leto-visit.timer 每小时叫一次；到点先判断这一轮该不该去。
+# 和 leto-wake-bridge.service 各跑各的：它不连唤醒流，桥断了它也照常。
+# User 和 EnvironmentFile 跟桥用同一份（injector 的路径、参数都在里面）。
+[Unit]
+Description=Leto 定时来访（往会话投一条「去 Leto 逛逛」）
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=replace-with-runtime-user
+EnvironmentFile=/etc/leto-wake-bridge.env
+ExecStart=/usr/bin/node /opt/leto-wake-bridge/visit.mjs run
+TimeoutStartSec=11min
+NoNewPrivileges=true
+UMask=0077
