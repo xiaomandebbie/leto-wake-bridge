@@ -1,0 +1,14 @@
+# Leto 定时来访的定时器：每小时整点叫一次 leto-visit.service。
+# 该不该去由 visit.mjs 自己判（工作日只有 8、12–13、18–23、0 点；周末全天）。
+# 启用：sudo systemctl enable --now leto-visit.timer
+[Unit]
+Description=Leto 定时来访（每小时整点）
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+AccuracySec=30s
+Persistent=false
+Unit=leto-visit.service
+
+[Install]
+WantedBy=timers.target
